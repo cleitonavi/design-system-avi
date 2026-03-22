@@ -127,6 +127,23 @@ section:last-of-type{border-bottom:none}
 .logo-sz{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)}
 .logo-dl{font-size:12px;font-weight:500;color:var(--brand);text-decoration:none;padding:4px 10px;border:1px solid rgba(0,207,175,.25);border-radius:6px;transition:background .15s}
 .logo-dl:hover{background:rgba(0,207,175,.08)}
+.logo-dl-all{display:block;width:100%;margin-bottom:48px;padding:14px 20px;background:transparent;border:1.5px solid var(--brand);border-radius:10px;color:var(--brand);font-size:14px;font-weight:500;cursor:pointer;transition:background .15s,opacity .15s;font-family:'Inter Tight',sans-serif;letter-spacing:-.01em;text-align:center}
+.logo-dl-all:hover{background:rgba(0,207,175,.08)}
+button.logo-dl{cursor:pointer;background:transparent;font-family:inherit}
+.logo-layout-block{margin-bottom:40px}
+.logo-layout-name{font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-bottom:12px}
+.logo-size-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.logo-item{background:var(--card);border:1px solid var(--border-subtle);border-radius:10px;overflow:hidden;transition:border-color .15s}
+.logo-item:hover{border-color:var(--border-strong)}
+.logo-item .logo-preview{height:100px;padding:20px 24px;display:flex;align-items:center;justify-content:flex-start;min-height:unset}
+.logo-item .logo-preview svg{width:100%;height:auto;max-height:none}
+.logo-item-icon .logo-preview{justify-content:center}
+.logo-item-icon .logo-preview svg{width:auto;height:52px}
+.logo-item .logo-preview img{width:100%;height:auto;max-height:none;object-fit:contain}
+.logo-item-icon .logo-preview img{width:auto;height:52px}
+.logo-bg-light{background:#FDFDFD}
+.logo-bg-dark{background:#12161A}
+.logo-item-foot{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-top:1px solid var(--border-subtle)}
 
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--brand);color:var(--bg);font-size:12px;font-weight:500;padding:10px 16px;border-radius:8px;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none}
@@ -140,7 +157,7 @@ footer a{color:var(--brand);text-decoration:none}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px}
-@media(max-width:900px){.container{padding:0 20px}.hero h1{font-size:36px}.radius-grid{grid-template-columns:repeat(4,1fr)}.var-grid{grid-template-columns:1fr}.logo-cols{grid-template-columns:1fr}}
+@media(max-width:900px){.container{padding:0 20px}.hero h1{font-size:36px}.radius-grid{grid-template-columns:repeat(4,1fr)}.var-grid{grid-template-columns:1fr}.logo-cols{grid-template-columns:1fr}.logo-size-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -156,6 +173,7 @@ footer a{color:var(--brand);text-decoration:none}
       <a class="nav-link" href="#spacing">Espaçamento</a>
       <a class="nav-link" href="#radius">Radius</a>
       <a class="nav-link" href="#variables">Variáveis</a>
+      <a class="nav-link" href="#logos">Logos</a>
     </div>
     <span class="nav-badge">v1.0 · Foundations</span>
   </div>
@@ -901,8 +919,99 @@ footer a{color:var(--brand);text-decoration:none}
   </div>
 </div></section>
 
-<!-- LOGOS -->
+<section id="logos">
+<div class="container">
+  <div class="section-head">
+    <p class="section-label">F · LOGOS</p>
+    <h2 class="section-title">Sistema de Logo</h2>
+    <p class="section-sub">24 versões — 4 layouts · 2 cores · 3 tamanhos</p>
+  </div>
+  <p class="logo-note">Arquivos vetoriais SVG prontos para qualquer resolução. Clique em <strong style="color:var(--brand)">↓ SVG</strong> para baixar cada versão ou use o botão abaixo para baixar todas de uma vez.</p>
+  <button class="logo-dl-all" onclick="downloadAll()">↓ Baixar todas as 24 versões (.svg)</button>
 
+  <!-- PRETO -->
+  <div class="logo-grp">
+    <div class="logo-grp-head"><span class="logo-grp-name">Preto</span><span class="logo-grp-desc">Para fundos claros e brancos</span></div>
+
+    <div class="logo-layout-block">
+      <div class="logo-layout-name">Wordmark</div>
+      <div class="logo-size-row">
+        <div class="logo-item"><div class="logo-preview logo-bg-light"><img src="logos/layout=wordmark-color=black-size=LG.svg" alt="Wordmark Preto LG"></div><div class="logo-item-foot"><span class="logo-sz">LG</span><a class="logo-dl" href="logos/layout=wordmark-color=black-size=LG.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-light"><img src="logos/layout=wordmark-color=black-size=MD.svg" alt="Wordmark Preto MD"></div><div class="logo-item-foot"><span class="logo-sz">MD</span><a class="logo-dl" href="logos/layout=wordmark-color=black-size=MD.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-light"><img src="logos/layout=wordmark-color=black-size=SM.svg" alt="Wordmark Preto SM"></div><div class="logo-item-foot"><span class="logo-sz">SM</span><a class="logo-dl" href="logos/layout=wordmark-color=black-size=SM.svg" download>↓ SVG</a></div></div>
+      </div>
+    </div>
+
+    <div class="logo-layout-block">
+      <div class="logo-layout-name">Ícone</div>
+      <div class="logo-size-row">
+        <div class="logo-item logo-item-icon"><div class="logo-preview logo-bg-light"><img src="logos/layout=icon-color=black-size=LG.svg" alt="Ícone Preto LG"></div><div class="logo-item-foot"><span class="logo-sz">LG</span><a class="logo-dl" href="logos/layout=icon-color=black-size=LG.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item logo-item-icon"><div class="logo-preview logo-bg-light"><img src="logos/layout=icon-color=black-size=MD.svg" alt="Ícone Preto MD"></div><div class="logo-item-foot"><span class="logo-sz">MD</span><a class="logo-dl" href="logos/layout=icon-color=black-size=MD.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item logo-item-icon"><div class="logo-preview logo-bg-light"><img src="logos/layout=icon-color=black-size=SM.svg" alt="Ícone Preto SM"></div><div class="logo-item-foot"><span class="logo-sz">SM</span><a class="logo-dl" href="logos/layout=icon-color=black-size=SM.svg" download>↓ SVG</a></div></div>
+      </div>
+    </div>
+
+    <div class="logo-layout-block">
+      <div class="logo-layout-name">Horizontal</div>
+      <div class="logo-size-row">
+        <div class="logo-item"><div class="logo-preview logo-bg-light"><img src="logos/layout=horizontal-color=black-size=LG.svg" alt="Horizontal Preto LG"></div><div class="logo-item-foot"><span class="logo-sz">LG</span><a class="logo-dl" href="logos/layout=horizontal-color=black-size=LG.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-light"><img src="logos/layout=horizontal-color=black-size=MD.svg" alt="Horizontal Preto MD"></div><div class="logo-item-foot"><span class="logo-sz">MD</span><a class="logo-dl" href="logos/layout=horizontal-color=black-size=MD.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-light"><img src="logos/layout=horizontal-color=black-size=SM.svg" alt="Horizontal Preto SM"></div><div class="logo-item-foot"><span class="logo-sz">SM</span><a class="logo-dl" href="logos/layout=horizontal-color=black-size=SM.svg" download>↓ SVG</a></div></div>
+      </div>
+    </div>
+
+    <div class="logo-layout-block">
+      <div class="logo-layout-name">Horizontal + Tag</div>
+      <div class="logo-size-row">
+        <div class="logo-item"><div class="logo-preview logo-bg-light"><img src="logos/layout=horizontal-tag-color=black-size=LG.svg" alt="Horizontal Tag Preto LG"></div><div class="logo-item-foot"><span class="logo-sz">LG</span><a class="logo-dl" href="logos/layout=horizontal-tag-color=black-size=LG.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-light"><img src="logos/layout=horizontal-tag-color=black-size=MD.svg" alt="Horizontal Tag Preto MD"></div><div class="logo-item-foot"><span class="logo-sz">MD</span><a class="logo-dl" href="logos/layout=horizontal-tag-color=black-size=MD.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-light"><img src="logos/layout=horizontal-tag-color=black-size=SM.svg" alt="Horizontal Tag Preto SM"></div><div class="logo-item-foot"><span class="logo-sz">SM</span><a class="logo-dl" href="logos/layout=horizontal-tag-color=black-size=SM.svg" download>↓ SVG</a></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BRANCO -->
+  <div class="logo-grp">
+    <div class="logo-grp-head"><span class="logo-grp-name">Branco</span><span class="logo-grp-desc">Para fundos escuros e coloridos</span></div>
+
+    <div class="logo-layout-block">
+      <div class="logo-layout-name">Wordmark</div>
+      <div class="logo-size-row">
+        <div class="logo-item"><div class="logo-preview logo-bg-dark"><img src="logos/layout=wordmark-color=white-size=LG.svg" alt="Wordmark Branco LG"></div><div class="logo-item-foot"><span class="logo-sz">LG</span><a class="logo-dl" href="logos/layout=wordmark-color=white-size=LG.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-dark"><img src="logos/layout=wordmark-color=white-size=MD.svg" alt="Wordmark Branco MD"></div><div class="logo-item-foot"><span class="logo-sz">MD</span><a class="logo-dl" href="logos/layout=wordmark-color=white-size=MD.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-dark"><img src="logos/layout=wordmark-color=white-size=SM.svg" alt="Wordmark Branco SM"></div><div class="logo-item-foot"><span class="logo-sz">SM</span><a class="logo-dl" href="logos/layout=wordmark-color=white-size=SM.svg" download>↓ SVG</a></div></div>
+      </div>
+    </div>
+
+    <div class="logo-layout-block">
+      <div class="logo-layout-name">Ícone</div>
+      <div class="logo-size-row">
+        <div class="logo-item logo-item-icon"><div class="logo-preview logo-bg-dark"><img src="logos/layout=icon-color=white-size=LG.svg" alt="Ícone Branco LG"></div><div class="logo-item-foot"><span class="logo-sz">LG</span><a class="logo-dl" href="logos/layout=icon-color=white-size=LG.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item logo-item-icon"><div class="logo-preview logo-bg-dark"><img src="logos/layout=icon-color=white-size=MD.svg" alt="Ícone Branco MD"></div><div class="logo-item-foot"><span class="logo-sz">MD</span><a class="logo-dl" href="logos/layout=icon-color=white-size=MD.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item logo-item-icon"><div class="logo-preview logo-bg-dark"><img src="logos/layout=icon-color=white-size=SM.svg" alt="Ícone Branco SM"></div><div class="logo-item-foot"><span class="logo-sz">SM</span><a class="logo-dl" href="logos/layout=icon-color=white-size=SM.svg" download>↓ SVG</a></div></div>
+      </div>
+    </div>
+
+    <div class="logo-layout-block">
+      <div class="logo-layout-name">Horizontal</div>
+      <div class="logo-size-row">
+        <div class="logo-item"><div class="logo-preview logo-bg-dark"><img src="logos/layout=horizontal-color=white-size=LG.svg" alt="Horizontal Branco LG"></div><div class="logo-item-foot"><span class="logo-sz">LG</span><a class="logo-dl" href="logos/layout=horizontal-color=white-size=LG.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-dark"><img src="logos/layout=horizontal-color=white-size=MD.svg" alt="Horizontal Branco MD"></div><div class="logo-item-foot"><span class="logo-sz">MD</span><a class="logo-dl" href="logos/layout=horizontal-color=white-size=MD.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-dark"><img src="logos/layout=horizontal-color=white-size=SM.svg" alt="Horizontal Branco SM"></div><div class="logo-item-foot"><span class="logo-sz">SM</span><a class="logo-dl" href="logos/layout=horizontal-color=white-size=SM.svg" download>↓ SVG</a></div></div>
+      </div>
+    </div>
+
+    <div class="logo-layout-block">
+      <div class="logo-layout-name">Horizontal + Tag</div>
+      <div class="logo-size-row">
+        <div class="logo-item"><div class="logo-preview logo-bg-dark"><img src="logos/layout=horizontal-tag-color=white-size=LG.svg" alt="Horizontal Tag Branco LG"></div><div class="logo-item-foot"><span class="logo-sz">LG</span><a class="logo-dl" href="logos/layout=horizontal-tag-color=white-size=LG.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-dark"><img src="logos/layout=horizontal-tag-color=white-size=MD.svg" alt="Horizontal Tag Branco MD"></div><div class="logo-item-foot"><span class="logo-sz">MD</span><a class="logo-dl" href="logos/layout=horizontal-tag-color=white-size=MD.svg" download>↓ SVG</a></div></div>
+        <div class="logo-item"><div class="logo-preview logo-bg-dark"><img src="logos/layout=horizontal-tag-color=white-size=SM.svg" alt="Horizontal Tag Branco SM"></div><div class="logo-item-foot"><span class="logo-sz">SM</span><a class="logo-dl" href="logos/layout=horizontal-tag-color=white-size=SM.svg" download>↓ SVG</a></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
 
 <div class="container">
   <footer>
@@ -915,6 +1024,7 @@ footer a{color:var(--brand);text-decoration:none}
 <script>
 const toast=document.getElementById('toast');
 function copy(text,label){navigator.clipboard.writeText(text).then(()=>{toast.textContent=label?label+' copiado!':'Copiado!';toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)})}
+function downloadAll(){const files=['logos/layout=wordmark-color=black-size=LG.svg','logos/layout=wordmark-color=black-size=MD.svg','logos/layout=wordmark-color=black-size=SM.svg','logos/layout=icon-color=black-size=LG.svg','logos/layout=icon-color=black-size=MD.svg','logos/layout=icon-color=black-size=SM.svg','logos/layout=horizontal-color=black-size=LG.svg','logos/layout=horizontal-color=black-size=MD.svg','logos/layout=horizontal-color=black-size=SM.svg','logos/layout=horizontal-tag-color=black-size=LG.svg','logos/layout=horizontal-tag-color=black-size=MD.svg','logos/layout=horizontal-tag-color=black-size=SM.svg','logos/layout=wordmark-color=white-size=LG.svg','logos/layout=wordmark-color=white-size=MD.svg','logos/layout=wordmark-color=white-size=SM.svg','logos/layout=icon-color=white-size=LG.svg','logos/layout=icon-color=white-size=MD.svg','logos/layout=icon-color=white-size=SM.svg','logos/layout=horizontal-color=white-size=LG.svg','logos/layout=horizontal-color=white-size=MD.svg','logos/layout=horizontal-color=white-size=SM.svg','logos/layout=horizontal-tag-color=white-size=LG.svg','logos/layout=horizontal-tag-color=white-size=MD.svg','logos/layout=horizontal-tag-color=white-size=SM.svg'];files.forEach((f,i)=>setTimeout(()=>{const a=document.createElement('a');a.href=f;a.download=f.split('/').pop();document.body.appendChild(a);a.click();document.body.removeChild(a)},i*120))}
 const sections=document.querySelectorAll('section[id]'),links=document.querySelectorAll('.nav-link');
 const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const m=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(m)m.classList.add('active')}})},{threshold:.25});
 sections.forEach(s=>io.observe(s));
