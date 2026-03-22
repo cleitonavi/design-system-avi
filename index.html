@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DS Avi — 01 · Foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,700&family=JetBrains+Mono&family=Work+Sans:ital,wght@0,400;0,500;0,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050a0d;--card:#191f23;--subtle:#283136;
+  --brand:#00cfaf;--text:#fdfdfd;--muted:#8d989b;--disabled:#6a767b;
+  --border:#283136;--border-subtle:#191f23;--border-strong:#48545a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter Tight',sans-serif;font-size:14px;line-height:1.6;overflow-x:hidden}
+.container{max-width:1280px;margin:0 auto;padding:0 48px}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(5,10,13,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-subtle)}
+.nav-inner{display:flex;align-items:center;height:56px;max-width:1280px;margin:0 auto;padding:0 48px;gap:0}
+.nav-logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500;color:var(--text);text-decoration:none;margin-right:40px}
+.nav-links{display:flex;gap:4px;flex:1;flex-wrap:wrap}
+.nav-link{font-size:13px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:6px;transition:color .15s,background .15s}
+.nav-link:hover{color:var(--text);background:var(--border)}
+.nav-link.active{color:var(--brand)}
+.nav-badge{margin-left:auto;font-size:11px;font-weight:500;color:var(--brand);font-family:'JetBrains Mono',monospace;letter-spacing:.08em;border:1px solid rgba(0,207,175,.25);border-radius:4px;padding:3px 8px;white-space:nowrap}
+
+/* HERO */
+.hero{padding:80px 0 64px;border-bottom:1px solid var(--border-subtle);position:relative;overflow:hidden}
+.hero::before{content:'FOUNDATIONS';position:absolute;bottom:-16px;right:0;font-size:160px;font-weight:700;color:var(--text);opacity:.025;line-height:1;letter-spacing:-.04em;pointer-events:none;user-select:none}
+.hero-label{font-size:11px;font-weight:500;letter-spacing:.12em;color:var(--brand);font-family:'JetBrains Mono',monospace;margin-bottom:20px}
+.hero h1{font-size:56px;font-weight:500;line-height:1;letter-spacing:-.02em;margin-bottom:16px}
+.hero h1 span{color:var(--brand)}
+.hero p{font-size:16px;color:var(--muted);max-width:520px;line-height:1.6}
+.hero-meta{display:flex;align-items:center;gap:24px;margin-top:32px}
+.hero-stat{display:flex;flex-direction:column;gap:2px}
+.hero-stat strong{font-size:22px;font-weight:500;color:var(--brand)}
+.hero-stat span{font-size:11px;color:var(--muted);letter-spacing:.04em}
+.hero-sep{width:1px;height:32px;background:var(--border)}
+
+/* SECTIONS */
+section{padding:80px 0;border-bottom:1px solid var(--border-subtle)}
+section:last-of-type{border-bottom:none}
+.section-head{margin-bottom:48px}
+.section-label{font-size:11px;font-weight:500;letter-spacing:.12em;color:var(--brand);font-family:'JetBrains Mono',monospace;margin-bottom:10px}
+.section-title{font-size:28px;font-weight:500;letter-spacing:-.01em}
+.section-sub{font-size:13px;color:var(--muted);margin-top:6px}
+
+/* COLORS */
+.color-group{margin-bottom:48px}
+.color-group-name{font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:12px;text-transform:uppercase}
+.color-row{display:flex;gap:0;border-radius:12px;overflow:hidden}
+.color-swatch{flex:1;min-width:0;cursor:pointer;transition:flex .2s ease}
+.color-swatch:hover{flex:2}
+.color-swatch-fill{height:72px;width:100%}
+.color-swatch-info{padding:8px 8px 10px;background:var(--card)}
+.color-swatch-name{font-size:10px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.color-swatch-hex{font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:1px}
+.color-semantic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.color-semantic-card{background:var(--card);border:1px solid var(--border-subtle);border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.color-semantic-card:hover{border-color:var(--border-strong)}
+.color-semantic-fill{height:44px;width:100%}
+.color-semantic-body{padding:8px 12px 10px}
+.color-semantic-name{font-size:12px;font-weight:500;color:var(--text)}
+.color-semantic-hex{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.copy-hint{font-size:10px;color:var(--brand);margin-top:3px;opacity:0;transition:opacity .15s}
+.color-semantic-card:hover .copy-hint{opacity:1}
+
+/* TYPOGRAPHY */
+.typo-group{margin-bottom:32px}
+.typo-group-name{font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:4px;text-transform:uppercase}
+.typo-row{display:flex;align-items:baseline;gap:24px;padding:18px 0;border-bottom:1px solid var(--border-subtle)}
+.typo-row:last-child{border-bottom:none}
+.typo-meta{width:220px;flex-shrink:0;display:flex;flex-direction:column;gap:3px;padding-top:2px}
+.typo-token{font-size:12px;font-weight:500;color:var(--brand);font-family:'JetBrains Mono',monospace}
+.typo-info{font-size:11px;color:var(--muted)}
+.typo-sample{color:var(--text);flex:1;min-width:0;overflow:hidden}
+
+/* SPACING */
+.spacing-table{width:100%;border-collapse:collapse}
+.spacing-table th{text-align:left;font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:8px 12px 16px;border-bottom:1px solid var(--border-subtle);font-family:'JetBrains Mono',monospace}
+.spacing-table td{padding:12px;border-bottom:1px solid var(--border-subtle);vertical-align:middle}
+.spacing-table tr:last-child td{border-bottom:none}
+.spacing-table tr:hover td{background:var(--card)}
+.mono{font-family:'JetBrains Mono',monospace;color:var(--brand);font-size:12px}
+.spacing-bar-track{background:var(--border);border-radius:2px;height:6px;overflow:hidden}
+.spacing-bar{background:var(--brand);height:6px;border-radius:2px}
+
+/* RADIUS */
+.radius-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:16px}
+.radius-card{background:var(--card);border:1px solid var(--border-subtle);border-radius:12px;padding:24px 12px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.radius-demo{width:64px;height:64px;border:1.5px solid var(--brand);background:rgba(0,207,175,.06)}
+.radius-label{text-align:center}
+.radius-token{font-size:11px;color:var(--brand);font-family:'JetBrains Mono',monospace;display:block}
+.radius-val{font-size:11px;color:var(--muted)}
+
+/* VARIABLES */
+.var-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.var-collection{background:var(--card);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden}
+.var-collection-head{padding:14px 16px;border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between}
+.var-collection-name{font-size:13px;font-weight:500}
+.var-count{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.var-list{padding:8px 0;max-height:400px;overflow-y:auto}
+.var-item{display:flex;align-items:center;gap:10px;padding:5px 16px;font-size:12px;border-bottom:1px solid rgba(255,255,255,.03)}
+.var-item:last-child{border-bottom:none}
+.var-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.var-name{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.var-value{color:var(--text);font-family:'JetBrains Mono',monospace;font-size:10px;flex-shrink:0}
+
+/* LOGOS */
+.logo-note{font-size:13px;color:var(--muted);margin-bottom:32px;padding:12px 16px;background:var(--card);border-radius:8px;border:1px solid var(--border-subtle)}
+.logo-grp{margin-bottom:56px}
+.logo-grp-head{margin-bottom:16px;display:flex;align-items:baseline;gap:16px}
+.logo-grp-name{font-size:16px;font-weight:500}
+.logo-grp-desc{font-size:13px;color:var(--muted)}
+.logo-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.logo-col{border-radius:12px;overflow:hidden;border:1px solid var(--border-subtle)}
+.logo-col-label{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--muted);padding:14px 20px 10px}
+.logo-card{margin:0 16px 12px;border-radius:8px;overflow:hidden}
+.logo-card:last-of-type{margin-bottom:16px}
+.logo-preview{padding:24px 28px;display:flex;align-items:center;min-height:72px}
+.logo-preview svg{max-width:100%;height:auto;max-height:72px}
+.logo-foot{display:flex;align-items:center;justify-content:space-between;padding:6px 0 0}
+.logo-sz{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted)}
+.logo-dl{font-size:12px;font-weight:500;color:var(--brand);text-decoration:none;padding:4px 10px;border:1px solid rgba(0,207,175,.25);border-radius:6px;transition:background .15s}
+.logo-dl:hover{background:rgba(0,207,175,.08)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--brand);color:var(--bg);font-size:12px;font-weight:500;padding:10px 16px;border-radius:8px;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* FOOTER */
+footer{padding:40px 0;border-top:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:space-between}
+footer p{font-size:12px;color:var(--disabled)}
+footer a{color:var(--brand);text-decoration:none}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px}
+@media(max-width:900px){.container{padding:0 20px}.hero h1{font-size:36px}.radius-grid{grid-template-columns:repeat(4,1fr)}.var-grid{grid-template-columns:1fr}.logo-cols{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <svg width="22" height="18" viewBox="0 0 73 58" fill="none"><path d="M51.7063 0H20.9805L0 20.9805L36.3495 57.33L72.699 20.9805L51.7063 0ZM46.9466 40.1658H25.7371L11.858 26.2867L36.3495 1.79519L60.841 26.2867L46.9619 40.1658H46.9497H46.9466Z" fill="#00cfaf"/></svg>
+      DS Avi
+    </a>
+    <div class="nav-links">
+      <a class="nav-link active" href="#colors">Cores</a>
+      <a class="nav-link" href="#typography">Tipografia</a>
+      <a class="nav-link" href="#spacing">Espaçamento</a>
+      <a class="nav-link" href="#radius">Radius</a>
+      <a class="nav-link" href="#variables">Variáveis</a>
+    </div>
+    <span class="nav-badge">v1.0 · Foundations</span>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="hero">
+    <p class="hero-label">01 · FOUNDATIONS</p>
+    <h1>Design System <span>Tokens</span></h1>
+    <p>Cleiton Avi Design — referência completa de cores, tipografia, espaçamento e variáveis.</p>
+    <div class="hero-meta">
+      <div class="hero-stat"><strong>64</strong><span>COLOR STYLES</span></div>
+      <div class="hero-sep"></div>
+      <div class="hero-stat"><strong>34</strong><span>TEXT STYLES</span></div>
+      <div class="hero-sep"></div>
+      <div class="hero-stat"><strong>34</strong><span>TEXT STYLES</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- COLORS -->
+<section id="colors"><div class="container">
+  <div class="section-head"><p class="section-label">A · COLORS</p><h2 class="section-title">Sistema de Cores</h2><p class="section-sub">64 estilos. Clique para copiar o hex.</p></div>
+  <div class="color-group"><div class="color-group-name">neutral — 11 steps</div><div class="color-row"><div class="color-swatch" onclick="copy('#FDFDFD','neutral/50')" title="neutral/50 — #FDFDFD">
+  <div class="color-swatch-fill" style="background:#FDFDFD"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">50</div><div class="color-swatch-hex">#FDFDFD</div></div></div>
+<div class="color-swatch" onclick="copy('#F0F3F4','neutral/100')" title="neutral/100 — #F0F3F4">
+  <div class="color-swatch-fill" style="background:#F0F3F4"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">100</div><div class="color-swatch-hex">#F0F3F4</div></div></div>
+<div class="color-swatch" onclick="copy('#CFD4D6','neutral/200')" title="neutral/200 — #CFD4D6">
+  <div class="color-swatch-fill" style="background:#CFD4D6"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">200</div><div class="color-swatch-hex">#CFD4D6</div></div></div>
+<div class="color-swatch" onclick="copy('#8D989B','neutral/300')" title="neutral/300 — #8D989B">
+  <div class="color-swatch-fill" style="background:#8D989B"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">300</div><div class="color-swatch-hex">#8D989B</div></div></div>
+<div class="color-swatch" onclick="copy('#6A767B','neutral/400')" title="neutral/400 — #6A767B">
+  <div class="color-swatch-fill" style="background:#6A767B"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">400</div><div class="color-swatch-hex">#6A767B</div></div></div>
+<div class="color-swatch" onclick="copy('#48545A','neutral/500')" title="neutral/500 — #48545A">
+  <div class="color-swatch-fill" style="background:#48545A"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">500</div><div class="color-swatch-hex">#48545A</div></div></div>
+<div class="color-swatch" onclick="copy('#283136','neutral/600')" title="neutral/600 — #283136">
+  <div class="color-swatch-fill" style="background:#283136"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">600</div><div class="color-swatch-hex">#283136</div></div></div>
+<div class="color-swatch" onclick="copy('#191F23','neutral/700')" title="neutral/700 — #191F23">
+  <div class="color-swatch-fill" style="background:#191F23"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">700</div><div class="color-swatch-hex">#191F23</div></div></div>
+<div class="color-swatch" onclick="copy('#12161A','neutral/800')" title="neutral/800 — #12161A">
+  <div class="color-swatch-fill" style="background:#12161A"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">800</div><div class="color-swatch-hex">#12161A</div></div></div>
+<div class="color-swatch" onclick="copy('#050A0D','neutral/900')" title="neutral/900 — #050A0D">
+  <div class="color-swatch-fill" style="background:#050A0D"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">900</div><div class="color-swatch-hex">#050A0D</div></div></div>
+<div class="color-swatch" onclick="copy('#020507','neutral/950')" title="neutral/950 — #020507">
+  <div class="color-swatch-fill" style="background:#020507"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">950</div><div class="color-swatch-hex">#020507</div></div></div></div></div>
+  <div class="color-group"><div class="color-group-name">brand (teal) — 12 steps</div><div class="color-row"><div class="color-swatch" onclick="copy('#F0FFFB','brand/50')" title="brand/50 — #F0FFFB">
+  <div class="color-swatch-fill" style="background:#F0FFFB"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">50</div><div class="color-swatch-hex">#F0FFFB</div></div></div><div class="color-swatch" onclick="copy('#DEFFF5','brand/100')" title="brand/100 — #DEFFF5">
+  <div class="color-swatch-fill" style="background:#DEFFF5"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">100</div><div class="color-swatch-hex">#DEFFF5</div></div></div><div class="color-swatch" onclick="copy('#C5FFEE','brand/200')" title="brand/200 — #C5FFEE">
+  <div class="color-swatch-fill" style="background:#C5FFEE"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">200</div><div class="color-swatch-hex">#C5FFEE</div></div></div><div class="color-swatch" onclick="copy('#94FEE0','brand/300')" title="brand/300 — #94FEE0">
+  <div class="color-swatch-fill" style="background:#94FEE0"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">300</div><div class="color-swatch-hex">#94FEE0</div></div></div><div class="color-swatch" onclick="copy('#4AEDCA','brand/400')" title="brand/400 — #4AEDCA">
+  <div class="color-swatch-fill" style="background:#4AEDCA"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">400</div><div class="color-swatch-hex">#4AEDCA</div></div></div><div class="color-swatch" onclick="copy('#00CFAF','brand/500')" title="brand/500 — #00CFAF">
+  <div class="color-swatch-fill" style="background:#00CFAF"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">500</div><div class="color-swatch-hex">#00CFAF</div></div></div><div class="color-swatch" onclick="copy('#009E8A','brand/600')" title="brand/600 — #009E8A">
+  <div class="color-swatch-fill" style="background:#009E8A"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">600</div><div class="color-swatch-hex">#009E8A</div></div></div><div class="color-swatch" onclick="copy('#00776C','brand/700')" title="brand/700 — #00776C">
+  <div class="color-swatch-fill" style="background:#00776C"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">700</div><div class="color-swatch-hex">#00776C</div></div></div><div class="color-swatch" onclick="copy('#004543','brand/800')" title="brand/800 — #004543">
+  <div class="color-swatch-fill" style="background:#004543"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">800</div><div class="color-swatch-hex">#004543</div></div></div><div class="color-swatch" onclick="copy('#002A2A','brand/900')" title="brand/900 — #002A2A">
+  <div class="color-swatch-fill" style="background:#002A2A"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">900</div><div class="color-swatch-hex">#002A2A</div></div></div><div class="color-swatch" onclick="copy('#001A1A','brand/950')" title="brand/950 — #001A1A">
+  <div class="color-swatch-fill" style="background:#001A1A"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">950</div><div class="color-swatch-hex">#001A1A</div></div></div></div></div>
+  <div class="color-group"><div class="color-group-name">accent (orange) — 12 steps</div><div class="color-row"><div class="color-swatch" onclick="copy('#FFF5F2','accent/50')" title="accent/50 — #FFF5F2">
+  <div class="color-swatch-fill" style="background:#FFF5F2"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">50</div><div class="color-swatch-hex">#FFF5F2</div></div></div><div class="color-swatch" onclick="copy('#FFDFDE','accent/100')" title="accent/100 — #FFDFDE">
+  <div class="color-swatch-fill" style="background:#FFDFDE"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">100</div><div class="color-swatch-hex">#FFDFDE</div></div></div><div class="color-swatch" onclick="copy('#FFB2A6','accent/200')" title="accent/200 — #FFB2A6">
+  <div class="color-swatch-fill" style="background:#FFB2A6"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">200</div><div class="color-swatch-hex">#FFB2A6</div></div></div><div class="color-swatch" onclick="copy('#FF8E77','accent/300')" title="accent/300 — #FF8E77">
+  <div class="color-swatch-fill" style="background:#FF8E77"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">300</div><div class="color-swatch-hex">#FF8E77</div></div></div><div class="color-swatch" onclick="copy('#FF7150','accent/400')" title="accent/400 — #FF7150">
+  <div class="color-swatch-fill" style="background:#FF7150"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">400</div><div class="color-swatch-hex">#FF7150</div></div></div><div class="color-swatch" onclick="copy('#F55B30','accent/500')" title="accent/500 — #F55B30">
+  <div class="color-swatch-fill" style="background:#F55B30"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">500</div><div class="color-swatch-hex">#F55B30</div></div></div><div class="color-swatch" onclick="copy('#DD4F22','accent/600')" title="accent/600 — #DD4F22">
+  <div class="color-swatch-fill" style="background:#DD4F22"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">600</div><div class="color-swatch-hex">#DD4F22</div></div></div><div class="color-swatch" onclick="copy('#C34417','accent/700')" title="accent/700 — #C34417">
+  <div class="color-swatch-fill" style="background:#C34417"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">700</div><div class="color-swatch-hex">#C34417</div></div></div><div class="color-swatch" onclick="copy('#872F07','accent/800')" title="accent/800 — #872F07">
+  <div class="color-swatch-fill" style="background:#872F07"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">800</div><div class="color-swatch-hex">#872F07</div></div></div><div class="color-swatch" onclick="copy('#4B1B00','accent/900')" title="accent/900 — #4B1B00">
+  <div class="color-swatch-fill" style="background:#4B1B00"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">900</div><div class="color-swatch-hex">#4B1B00</div></div></div><div class="color-swatch" onclick="copy('#1A0A00','accent/950')" title="accent/950 — #1A0A00">
+  <div class="color-swatch-fill" style="background:#1A0A00"></div>
+  <div class="color-swatch-info"><div class="color-swatch-name">950</div><div class="color-swatch-hex">#1A0A00</div></div></div></div></div>
+  <div class="color-group"><div class="color-group-name">semantic — feedback · surface · text · border · overlay</div><div class="color-semantic-grid"><div class="color-semantic-card" onclick="copy('#00CFAF','feedback/success/default')" title="feedback/success/default">
+  <div class="color-semantic-fill" style="background:#00CFAF"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/success/default</div>
+    <div class="color-semantic-hex">#00CFAF</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#001A1A','feedback/success/subtle')" title="feedback/success/subtle">
+  <div class="color-semantic-fill" style="background:#001A1A"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/success/subtle</div>
+    <div class="color-semantic-hex">#001A1A</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#94FEE0','feedback/success/text')" title="feedback/success/text">
+  <div class="color-semantic-fill" style="background:#94FEE0"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/success/text</div>
+    <div class="color-semantic-hex">#94FEE0</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#F59E0B','feedback/warning/default')" title="feedback/warning/default">
+  <div class="color-semantic-fill" style="background:#F59E0B"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/warning/default</div>
+    <div class="color-semantic-hex">#F59E0B</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#1A1200','feedback/warning/subtle')" title="feedback/warning/subtle">
+  <div class="color-semantic-fill" style="background:#1A1200"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/warning/subtle</div>
+    <div class="color-semantic-hex">#1A1200</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#FCD34D','feedback/warning/text')" title="feedback/warning/text">
+  <div class="color-semantic-fill" style="background:#FCD34D"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/warning/text</div>
+    <div class="color-semantic-hex">#FCD34D</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#EF4444','feedback/error/default')" title="feedback/error/default">
+  <div class="color-semantic-fill" style="background:#EF4444"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/error/default</div>
+    <div class="color-semantic-hex">#EF4444</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#1A0000','feedback/error/subtle')" title="feedback/error/subtle">
+  <div class="color-semantic-fill" style="background:#1A0000"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/error/subtle</div>
+    <div class="color-semantic-hex">#1A0000</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#FCA5A5','feedback/error/text')" title="feedback/error/text">
+  <div class="color-semantic-fill" style="background:#FCA5A5"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/error/text</div>
+    <div class="color-semantic-hex">#FCA5A5</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#3B82F6','feedback/info/default')" title="feedback/info/default">
+  <div class="color-semantic-fill" style="background:#3B82F6"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/info/default</div>
+    <div class="color-semantic-hex">#3B82F6</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#00091A','feedback/info/subtle')" title="feedback/info/subtle">
+  <div class="color-semantic-fill" style="background:#00091A"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/info/subtle</div>
+    <div class="color-semantic-hex">#00091A</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#93C5FD','feedback/info/text')" title="feedback/info/text">
+  <div class="color-semantic-fill" style="background:#93C5FD"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">feedback/info/text</div>
+    <div class="color-semantic-hex">#93C5FD</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#050A0D','surface/background')" title="surface/background">
+  <div class="color-semantic-fill" style="background:#050A0D"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">surface/background</div>
+    <div class="color-semantic-hex">#050A0D</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#191F23','surface/card')" title="surface/card">
+  <div class="color-semantic-fill" style="background:#191F23"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">surface/card</div>
+    <div class="color-semantic-hex">#191F23</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#12161A','surface/overlay')" title="surface/overlay">
+  <div class="color-semantic-fill" style="background:#12161A"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">surface/overlay</div>
+    <div class="color-semantic-hex">#12161A</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#283136','surface/subtle')" title="surface/subtle">
+  <div class="color-semantic-fill" style="background:#283136"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">surface/subtle</div>
+    <div class="color-semantic-hex">#283136</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#FDFDFD','surface/inverse')" title="surface/inverse">
+  <div class="color-semantic-fill" style="background:#FDFDFD"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">surface/inverse</div>
+    <div class="color-semantic-hex">#FDFDFD</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#FDFDFD','text/default')" title="text/default">
+  <div class="color-semantic-fill" style="background:#FDFDFD"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">text/default</div>
+    <div class="color-semantic-hex">#FDFDFD</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#8D989B','text/muted')" title="text/muted">
+  <div class="color-semantic-fill" style="background:#8D989B"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">text/muted</div>
+    <div class="color-semantic-hex">#8D989B</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#6A767B','text/disabled')" title="text/disabled">
+  <div class="color-semantic-fill" style="background:#6A767B"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">text/disabled</div>
+    <div class="color-semantic-hex">#6A767B</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#050A0D','text/inverted')" title="text/inverted">
+  <div class="color-semantic-fill" style="background:#050A0D"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">text/inverted</div>
+    <div class="color-semantic-hex">#050A0D</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#00CFAF','text/brand')" title="text/brand">
+  <div class="color-semantic-fill" style="background:#00CFAF"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">text/brand</div>
+    <div class="color-semantic-hex">#00CFAF</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#EF4444','text/error')" title="text/error">
+  <div class="color-semantic-fill" style="background:#EF4444"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">text/error</div>
+    <div class="color-semantic-hex">#EF4444</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#283136','border/default')" title="border/default">
+  <div class="color-semantic-fill" style="background:#283136"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">border/default</div>
+    <div class="color-semantic-hex">#283136</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#191F23','border/subtle')" title="border/subtle">
+  <div class="color-semantic-fill" style="background:#191F23"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">border/subtle</div>
+    <div class="color-semantic-hex">#191F23</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#48545A','border/strong')" title="border/strong">
+  <div class="color-semantic-fill" style="background:#48545A"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">border/strong</div>
+    <div class="color-semantic-hex">#48545A</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#00CFAF','border/focus')" title="border/focus">
+  <div class="color-semantic-fill" style="background:#00CFAF"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">border/focus</div>
+    <div class="color-semantic-hex">#00CFAF</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('#EF4444','border/error')" title="border/error">
+  <div class="color-semantic-fill" style="background:#EF4444"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">border/error</div>
+    <div class="color-semantic-hex">#EF4444</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('rgba(0,0,0,0.40)','overlay/scrim-40')" title="overlay/scrim-40">
+  <div class="color-semantic-fill" style="background:rgba(0,0,0,0.40)"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">overlay/scrim-40</div>
+    <div class="color-semantic-hex">rgba(0,0,0,0.40)</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('rgba(0,0,0,0.60)','overlay/scrim-60')" title="overlay/scrim-60">
+  <div class="color-semantic-fill" style="background:rgba(0,0,0,0.60)"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">overlay/scrim-60</div>
+    <div class="color-semantic-hex">rgba(0,0,0,0.60)</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div>
+<div class="color-semantic-card" onclick="copy('rgba(0,0,0,0.80)','overlay/scrim-80')" title="overlay/scrim-80">
+  <div class="color-semantic-fill" style="background:rgba(0,0,0,0.80)"></div>
+  <div class="color-semantic-body">
+    <div class="color-semantic-name">overlay/scrim-80</div>
+    <div class="color-semantic-hex">rgba(0,0,0,0.80)</div>
+    <div class="copy-hint">↗ copiar</div>
+  </div></div></div></div>
+</div></section>
+
+<!-- TYPOGRAPHY -->
+<section id="typography"><div class="container">
+  <div class="section-head"><p class="section-label">B · TYPOGRAPHY</p><h2 class="section-title">Escala Tipográfica</h2><p class="section-sub">Inter Tight · Work Sans · JetBrains Mono — 34 estilos</p></div>
+  <div class="typo-group"><div class="typo-group-name">display</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">display/hero</span>
+    <span class="typo-info">Inter Tight Light · 216px · lh 90% · ls -2px</span>
+  </div>
+  <div class="typo-sample" style="font-size:72px;font-weight:300;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:-2px">Design estratégico</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">display/xl</span>
+    <span class="typo-info">Inter Tight Regular · 168px · lh 100%</span>
+  </div>
+  <div class="typo-sample" style="font-size:72px;font-weight:400;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Design estratégico</div>
+</div>
+</div>
+<div class="typo-group"><div class="typo-group-name">heading</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/7xl</span>
+    <span class="typo-info">Inter Tight Medium · 144px · lh 100%</span>
+  </div>
+  <div class="typo-sample" style="font-size:72px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/6xl</span>
+    <span class="typo-info">Inter Tight Medium · 120px · lh 100%</span>
+  </div>
+  <div class="typo-sample" style="font-size:72px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/5xl</span>
+    <span class="typo-info">Inter Tight Medium · 96px · lh 100%</span>
+  </div>
+  <div class="typo-sample" style="font-size:72px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/4xl</span>
+    <span class="typo-info">Inter Tight Medium · 80px · lh 110%</span>
+  </div>
+  <div class="typo-sample" style="font-size:72px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/3xl</span>
+    <span class="typo-info">Inter Tight Medium · 64px · lh 120%</span>
+  </div>
+  <div class="typo-sample" style="font-size:64px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/2xl</span>
+    <span class="typo-info">Inter Tight Medium · 48px · lh 120%</span>
+  </div>
+  <div class="typo-sample" style="font-size:48px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/xl</span>
+    <span class="typo-info">Inter Tight Medium · 24px · lh 32px</span>
+  </div>
+  <div class="typo-sample" style="font-size:24px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/lg</span>
+    <span class="typo-info">Inter Tight Medium · 20px · lh 28px</span>
+  </div>
+  <div class="typo-sample" style="font-size:20px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/md</span>
+    <span class="typo-info">Inter Tight Medium · 18px · lh 24px</span>
+  </div>
+  <div class="typo-sample" style="font-size:18px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/sm</span>
+    <span class="typo-info">Inter Tight Medium · 16px · lh 20px</span>
+  </div>
+  <div class="typo-sample" style="font-size:16px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">heading/xs</span>
+    <span class="typo-info">Inter Tight Medium · 14px · lh 18px</span>
+  </div>
+  <div class="typo-sample" style="font-size:14px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Build to Last</div>
+</div>
+</div>
+<div class="typo-group"><div class="typo-group-name">body</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">body/4xl</span>
+    <span class="typo-info">Inter Tight Regular · 56px · lh 72px</span>
+  </div>
+  <div class="typo-sample" style="font-size:56px;font-weight:400;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Identidade visual que converte</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">body/3xl</span>
+    <span class="typo-info">Inter Tight Regular · 48px · lh 64px</span>
+  </div>
+  <div class="typo-sample" style="font-size:48px;font-weight:400;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Identidade visual que converte</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">body/2xl</span>
+    <span class="typo-info">Inter Tight Regular · 36px · lh 48px</span>
+  </div>
+  <div class="typo-sample" style="font-size:36px;font-weight:400;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Identidade visual que converte</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">body/xl</span>
+    <span class="typo-info">Inter Tight Regular · 30px · lh 150%</span>
+  </div>
+  <div class="typo-sample" style="font-size:30px;font-weight:400;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Identidade visual que converte</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">body/lg</span>
+    <span class="typo-info">Inter Tight Regular · 16px · lh 24px</span>
+  </div>
+  <div class="typo-sample" style="font-size:16px;font-weight:400;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Identidade visual que converte</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">body/md</span>
+    <span class="typo-info">Inter Tight Regular · 14px · lh 20px</span>
+  </div>
+  <div class="typo-sample" style="font-size:14px;font-weight:400;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Identidade visual que converte</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">body/sm</span>
+    <span class="typo-info">Inter Tight Regular · 12px · lh 16px</span>
+  </div>
+  <div class="typo-sample" style="font-size:12px;font-weight:400;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Identidade visual que converte</div>
+</div>
+</div>
+<div class="typo-group"><div class="typo-group-name">eyebrow</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">eyebrow/lg</span>
+    <span class="typo-info">Work Sans Medium · 30px · lh 100% · ls 3.6px</span>
+  </div>
+  <div class="typo-sample" style="font-size:30px;font-weight:500;line-height:1.1;font-family:'Work Sans', sans-serif;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:3.6px">BRANDING E ESTRATÉGIA</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">eyebrow/md</span>
+    <span class="typo-info">Work Sans Medium · 24px · lh 100% · ls 3.6px</span>
+  </div>
+  <div class="typo-sample" style="font-size:24px;font-weight:500;line-height:1.1;font-family:'Work Sans', sans-serif;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:3.6px">BRANDING E ESTRATÉGIA</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">eyebrow/sm</span>
+    <span class="typo-info">Work Sans Medium · 22px · lh 100% · ls 3.6px</span>
+  </div>
+  <div class="typo-sample" style="font-size:22px;font-weight:500;line-height:1.1;font-family:'Work Sans', sans-serif;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:3.6px">BRANDING E ESTRATÉGIA</div>
+</div>
+</div>
+<div class="typo-group"><div class="typo-group-name">tag</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">tag/lg</span>
+    <span class="typo-info">Inter Tight Medium · 24px · lh 24px</span>
+  </div>
+  <div class="typo-sample" style="font-size:24px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Categoria / Tag</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">tag/sm</span>
+    <span class="typo-info">Inter Tight Medium · 18px · lh 24px · ls 2px</span>
+  </div>
+  <div class="typo-sample" style="font-size:18px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:2px">Categoria / Tag</div>
+</div>
+</div>
+<div class="typo-group"><div class="typo-group-name">caption</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">caption/xl</span>
+    <span class="typo-info">Work Sans Regular · 28px · lh 140%</span>
+  </div>
+  <div class="typo-sample" style="font-size:28px;font-weight:400;line-height:1.1;font-family:'Work Sans', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Nota de rodapé e metadados</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">caption/lg</span>
+    <span class="typo-info">Work Sans Regular · 22px · lh 140%</span>
+  </div>
+  <div class="typo-sample" style="font-size:22px;font-weight:400;line-height:1.1;font-family:'Work Sans', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Nota de rodapé e metadados</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">caption/md</span>
+    <span class="typo-info">Work Sans Regular · 14px · lh 20px</span>
+  </div>
+  <div class="typo-sample" style="font-size:14px;font-weight:400;line-height:1.1;font-family:'Work Sans', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Nota de rodapé e metadados</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">caption/sm</span>
+    <span class="typo-info">Work Sans Regular · 12px · lh 16px</span>
+  </div>
+  <div class="typo-sample" style="font-size:12px;font-weight:400;line-height:1.1;font-family:'Work Sans', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Nota de rodapé e metadados</div>
+</div>
+</div>
+<div class="typo-group"><div class="typo-group-name">label</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">label/lg</span>
+    <span class="typo-info">Inter Tight Medium · 16px · lh 20px</span>
+  </div>
+  <div class="typo-sample" style="font-size:16px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Label de interface</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">label/md</span>
+    <span class="typo-info">Inter Tight Medium · 14px · lh 18px</span>
+  </div>
+  <div class="typo-sample" style="font-size:14px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Label de interface</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">label/sm</span>
+    <span class="typo-info">Inter Tight Medium · 12px · lh 16px</span>
+  </div>
+  <div class="typo-sample" style="font-size:12px;font-weight:500;line-height:1.1;font-family:'Inter Tight', sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">Label de interface</div>
+</div>
+</div>
+<div class="typo-group"><div class="typo-group-name">code</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">code/md</span>
+    <span class="typo-info">JetBrains Mono Regular · 14px · lh 150%</span>
+  </div>
+  <div class="typo-sample" style="font-size:14px;font-weight:400;line-height:1.1;font-family:'JetBrains Mono', monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">const brand = 'cleiton-avi';</div>
+</div>
+<div class="typo-row">
+  <div class="typo-meta">
+    <span class="typo-token">code/sm</span>
+    <span class="typo-info">JetBrains Mono Regular · 12px · lh 160%</span>
+  </div>
+  <div class="typo-sample" style="font-size:12px;font-weight:400;line-height:1.1;font-family:'JetBrains Mono', monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0">const brand = 'cleiton-avi';</div>
+</div>
+</div>
+</div></section>
+
+<!-- SPACING -->
+<section id="spacing"><div class="container">
+  <div class="section-head"><p class="section-label">C · SPACING</p><h2 class="section-title">Escala de Espaçamento</h2><p class="section-sub">space-1 a space-14 — base 8px grid</p></div>
+  <table class="spacing-table">
+    <thead><tr><th>Token</th><th>Valor</th><th>Uso</th><th>Visual</th></tr></thead>
+    <tbody><tr>
+  <td><span class="mono">space-1</span></td>
+  <td><span class="mono">2px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:2%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-2</span></td>
+  <td><span class="mono">4px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:3%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-3</span></td>
+  <td><span class="mono">8px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:6%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-4</span></td>
+  <td><span class="mono">12px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:9%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-5</span></td>
+  <td><span class="mono">16px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:12%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-6</span></td>
+  <td><span class="mono">20px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:16%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-7</span></td>
+  <td><span class="mono">24px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:19%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-8</span></td>
+  <td><span class="mono">32px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:25%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-9</span></td>
+  <td><span class="mono">40px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:31%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-10</span></td>
+  <td><span class="mono">48px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:38%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-11</span></td>
+  <td><span class="mono">64px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:50%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-12</span></td>
+  <td><span class="mono">80px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:62%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-13</span></td>
+  <td><span class="mono">96px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:75%"></div></div></td>
+</tr>
+<tr>
+  <td><span class="mono">space-14</span></td>
+  <td><span class="mono">128px</span></td>
+  <td style="color:var(--muted);font-size:12px">padding · margin · gap</td>
+  <td style="width:40%"><div class="spacing-bar-track"><div class="spacing-bar" style="width:100%"></div></div></td>
+</tr></tbody>
+  </table>
+</div></section>
+
+<!-- RADIUS -->
+<section id="radius"><div class="container">
+  <div class="section-head"><p class="section-label">D · BORDER RADIUS</p><h2 class="section-title">Raios de Borda</h2><p class="section-sub">7 tokens — de zero a pill</p></div>
+  <div class="radius-grid"><div class="radius-card">
+  <div class="radius-demo" style="border-radius:0px"></div>
+  <div class="radius-label">
+    <span class="radius-token">radius-none</span>
+    <span class="radius-val">0px</span>
+  </div>
+</div>
+<div class="radius-card">
+  <div class="radius-demo" style="border-radius:2px"></div>
+  <div class="radius-label">
+    <span class="radius-token">radius-xs</span>
+    <span class="radius-val">2px</span>
+  </div>
+</div>
+<div class="radius-card">
+  <div class="radius-demo" style="border-radius:4px"></div>
+  <div class="radius-label">
+    <span class="radius-token">radius-sm</span>
+    <span class="radius-val">4px</span>
+  </div>
+</div>
+<div class="radius-card">
+  <div class="radius-demo" style="border-radius:8px"></div>
+  <div class="radius-label">
+    <span class="radius-token">radius-md</span>
+    <span class="radius-val">8px</span>
+  </div>
+</div>
+<div class="radius-card">
+  <div class="radius-demo" style="border-radius:16px"></div>
+  <div class="radius-label">
+    <span class="radius-token">radius-lg</span>
+    <span class="radius-val">16px</span>
+  </div>
+</div>
+<div class="radius-card">
+  <div class="radius-demo" style="border-radius:24px"></div>
+  <div class="radius-label">
+    <span class="radius-token">radius-xl</span>
+    <span class="radius-val">24px</span>
+  </div>
+</div>
+<div class="radius-card">
+  <div class="radius-demo" style="border-radius:9999px"></div>
+  <div class="radius-label">
+    <span class="radius-token">radius-full</span>
+    <span class="radius-val">9999px</span>
+  </div>
+</div></div>
+</div></section>
+
+<!-- VARIABLES -->
+<section id="variables"><div class="container">
+  <div class="section-head"><p class="section-label">E · VARIABLES</p><h2 class="section-title">Variáveis do Sistema</h2><p class="section-sub">Primitives → Semantic. Aliases sem valores brutos.</p></div>
+  <div class="var-grid">
+    <div class="var-collection">
+      <div class="var-collection-head"><span class="var-collection-name">Primitives — Colors</span><span class="var-count">33 vars</span></div>
+      <div class="var-list"><div class="var-item"><div class="var-dot" style="background:#FDFDFD"></div><span class="var-name">neutral/50</span><span class="var-value">#FDFDFD</span></div><div class="var-item"><div class="var-dot" style="background:#F0F3F4"></div><span class="var-name">neutral/100</span><span class="var-value">#F0F3F4</span></div><div class="var-item"><div class="var-dot" style="background:#CFD4D6"></div><span class="var-name">neutral/200</span><span class="var-value">#CFD4D6</span></div><div class="var-item"><div class="var-dot" style="background:#8D989B"></div><span class="var-name">neutral/300</span><span class="var-value">#8D989B</span></div><div class="var-item"><div class="var-dot" style="background:#6A767B"></div><span class="var-name">neutral/400</span><span class="var-value">#6A767B</span></div><div class="var-item"><div class="var-dot" style="background:#48545A"></div><span class="var-name">neutral/500</span><span class="var-value">#48545A</span></div><div class="var-item"><div class="var-dot" style="background:#283136"></div><span class="var-name">neutral/600</span><span class="var-value">#283136</span></div><div class="var-item"><div class="var-dot" style="background:#191F23"></div><span class="var-name">neutral/700</span><span class="var-value">#191F23</span></div><div class="var-item"><div class="var-dot" style="background:#12161A"></div><span class="var-name">neutral/800</span><span class="var-value">#12161A</span></div><div class="var-item"><div class="var-dot" style="background:#050A0D"></div><span class="var-name">neutral/900</span><span class="var-value">#050A0D</span></div><div class="var-item"><div class="var-dot" style="background:#020507"></div><span class="var-name">neutral/950</span><span class="var-value">#020507</span></div><div class="var-item"><div class="var-dot" style="background:#F0FFFB"></div><span class="var-name">brand/50</span><span class="var-value">#F0FFFB</span></div><div class="var-item"><div class="var-dot" style="background:#DEFFF5"></div><span class="var-name">brand/100</span><span class="var-value">#DEFFF5</span></div><div class="var-item"><div class="var-dot" style="background:#C5FFEE"></div><span class="var-name">brand/200</span><span class="var-value">#C5FFEE</span></div><div class="var-item"><div class="var-dot" style="background:#94FEE0"></div><span class="var-name">brand/300</span><span class="var-value">#94FEE0</span></div><div class="var-item"><div class="var-dot" style="background:#4AEDCA"></div><span class="var-name">brand/400</span><span class="var-value">#4AEDCA</span></div><div class="var-item"><div class="var-dot" style="background:#00CFAF"></div><span class="var-name">brand/500</span><span class="var-value">#00CFAF</span></div><div class="var-item"><div class="var-dot" style="background:#009E8A"></div><span class="var-name">brand/600</span><span class="var-value">#009E8A</span></div><div class="var-item"><div class="var-dot" style="background:#00776C"></div><span class="var-name">brand/700</span><span class="var-value">#00776C</span></div><div class="var-item"><div class="var-dot" style="background:#004543"></div><span class="var-name">brand/800</span><span class="var-value">#004543</span></div><div class="var-item"><div class="var-dot" style="background:#002A2A"></div><span class="var-name">brand/900</span><span class="var-value">#002A2A</span></div><div class="var-item"><div class="var-dot" style="background:#001A1A"></div><span class="var-name">brand/950</span><span class="var-value">#001A1A</span></div><div class="var-item"><div class="var-dot" style="background:#FFF5F2"></div><span class="var-name">accent/50</span><span class="var-value">#FFF5F2</span></div><div class="var-item"><div class="var-dot" style="background:#FFDFDE"></div><span class="var-name">accent/100</span><span class="var-value">#FFDFDE</span></div><div class="var-item"><div class="var-dot" style="background:#FFB2A6"></div><span class="var-name">accent/200</span><span class="var-value">#FFB2A6</span></div><div class="var-item"><div class="var-dot" style="background:#FF8E77"></div><span class="var-name">accent/300</span><span class="var-value">#FF8E77</span></div><div class="var-item"><div class="var-dot" style="background:#FF7150"></div><span class="var-name">accent/400</span><span class="var-value">#FF7150</span></div><div class="var-item"><div class="var-dot" style="background:#F55B30"></div><span class="var-name">accent/500</span><span class="var-value">#F55B30</span></div><div class="var-item"><div class="var-dot" style="background:#DD4F22"></div><span class="var-name">accent/600</span><span class="var-value">#DD4F22</span></div><div class="var-item"><div class="var-dot" style="background:#C34417"></div><span class="var-name">accent/700</span><span class="var-value">#C34417</span></div><div class="var-item"><div class="var-dot" style="background:#872F07"></div><span class="var-name">accent/800</span><span class="var-value">#872F07</span></div><div class="var-item"><div class="var-dot" style="background:#4B1B00"></div><span class="var-name">accent/900</span><span class="var-value">#4B1B00</span></div><div class="var-item"><div class="var-dot" style="background:#1A0A00"></div><span class="var-name">accent/950</span><span class="var-value">#1A0A00</span></div></div>
+    </div>
+    <div class="var-collection">
+      <div class="var-collection-head"><span class="var-collection-name">Primitives — Spacing / Radius</span><span class="var-count">21 vars</span></div>
+      <div class="var-list"><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-1</span><span class="var-value">2px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-2</span><span class="var-value">4px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-3</span><span class="var-value">8px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-4</span><span class="var-value">12px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-5</span><span class="var-value">16px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-6</span><span class="var-value">20px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-7</span><span class="var-value">24px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-8</span><span class="var-value">32px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-9</span><span class="var-value">40px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-10</span><span class="var-value">48px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-11</span><span class="var-value">64px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-12</span><span class="var-value">80px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-13</span><span class="var-value">96px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.4"></div><span class="var-name">spacing/space-14</span><span class="var-value">128px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.3;border-radius:0px"></div><span class="var-name">radius/none</span><span class="var-value">0px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.3;border-radius:2px"></div><span class="var-name">radius/xs</span><span class="var-value">2px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.3;border-radius:4px"></div><span class="var-name">radius/sm</span><span class="var-value">4px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.3;border-radius:8px"></div><span class="var-name">radius/md</span><span class="var-value">8px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.3;border-radius:16px"></div><span class="var-name">radius/lg</span><span class="var-value">16px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.3;border-radius:24px"></div><span class="var-name">radius/xl</span><span class="var-value">24px</span></div><div class="var-item"><div class="var-dot" style="background:var(--brand);opacity:.3;border-radius:9999px"></div><span class="var-name">radius/full</span><span class="var-value">9999px</span></div></div>
+    </div>
+    <div class="var-collection">
+      <div class="var-collection-head"><span class="var-collection-name">Semantic</span><span class="var-count">31 vars</span></div>
+      <div class="var-list"><div class="var-item"><div class="var-dot" style="background:#00CFAF"></div><span class="var-name">feedback/success/default</span><span class="var-value">#00CFAF</span></div><div class="var-item"><div class="var-dot" style="background:#001A1A"></div><span class="var-name">feedback/success/subtle</span><span class="var-value">#001A1A</span></div><div class="var-item"><div class="var-dot" style="background:#94FEE0"></div><span class="var-name">feedback/success/text</span><span class="var-value">#94FEE0</span></div><div class="var-item"><div class="var-dot" style="background:#F59E0B"></div><span class="var-name">feedback/warning/default</span><span class="var-value">#F59E0B</span></div><div class="var-item"><div class="var-dot" style="background:#1A1200"></div><span class="var-name">feedback/warning/subtle</span><span class="var-value">#1A1200</span></div><div class="var-item"><div class="var-dot" style="background:#FCD34D"></div><span class="var-name">feedback/warning/text</span><span class="var-value">#FCD34D</span></div><div class="var-item"><div class="var-dot" style="background:#EF4444"></div><span class="var-name">feedback/error/default</span><span class="var-value">#EF4444</span></div><div class="var-item"><div class="var-dot" style="background:#1A0000"></div><span class="var-name">feedback/error/subtle</span><span class="var-value">#1A0000</span></div><div class="var-item"><div class="var-dot" style="background:#FCA5A5"></div><span class="var-name">feedback/error/text</span><span class="var-value">#FCA5A5</span></div><div class="var-item"><div class="var-dot" style="background:#3B82F6"></div><span class="var-name">feedback/info/default</span><span class="var-value">#3B82F6</span></div><div class="var-item"><div class="var-dot" style="background:#00091A"></div><span class="var-name">feedback/info/subtle</span><span class="var-value">#00091A</span></div><div class="var-item"><div class="var-dot" style="background:#93C5FD"></div><span class="var-name">feedback/info/text</span><span class="var-value">#93C5FD</span></div><div class="var-item"><div class="var-dot" style="background:#050A0D"></div><span class="var-name">surface/background</span><span class="var-value">#050A0D</span></div><div class="var-item"><div class="var-dot" style="background:#191F23"></div><span class="var-name">surface/card</span><span class="var-value">#191F23</span></div><div class="var-item"><div class="var-dot" style="background:#12161A"></div><span class="var-name">surface/overlay</span><span class="var-value">#12161A</span></div><div class="var-item"><div class="var-dot" style="background:#283136"></div><span class="var-name">surface/subtle</span><span class="var-value">#283136</span></div><div class="var-item"><div class="var-dot" style="background:#FDFDFD"></div><span class="var-name">surface/inverse</span><span class="var-value">#FDFDFD</span></div><div class="var-item"><div class="var-dot" style="background:#FDFDFD"></div><span class="var-name">text/default</span><span class="var-value">#FDFDFD</span></div><div class="var-item"><div class="var-dot" style="background:#8D989B"></div><span class="var-name">text/muted</span><span class="var-value">#8D989B</span></div><div class="var-item"><div class="var-dot" style="background:#6A767B"></div><span class="var-name">text/disabled</span><span class="var-value">#6A767B</span></div><div class="var-item"><div class="var-dot" style="background:#050A0D"></div><span class="var-name">text/inverted</span><span class="var-value">#050A0D</span></div><div class="var-item"><div class="var-dot" style="background:#00CFAF"></div><span class="var-name">text/brand</span><span class="var-value">#00CFAF</span></div><div class="var-item"><div class="var-dot" style="background:#EF4444"></div><span class="var-name">text/error</span><span class="var-value">#EF4444</span></div><div class="var-item"><div class="var-dot" style="background:#283136"></div><span class="var-name">border/default</span><span class="var-value">#283136</span></div><div class="var-item"><div class="var-dot" style="background:#191F23"></div><span class="var-name">border/subtle</span><span class="var-value">#191F23</span></div><div class="var-item"><div class="var-dot" style="background:#48545A"></div><span class="var-name">border/strong</span><span class="var-value">#48545A</span></div><div class="var-item"><div class="var-dot" style="background:#00CFAF"></div><span class="var-name">border/focus</span><span class="var-value">#00CFAF</span></div><div class="var-item"><div class="var-dot" style="background:#EF4444"></div><span class="var-name">border/error</span><span class="var-value">#EF4444</span></div><div class="var-item"><div class="var-dot" style="background:rgba(0,0,0,0.40)"></div><span class="var-name">overlay/scrim-40</span><span class="var-value">rgba(0,0,0,0.40)</span></div><div class="var-item"><div class="var-dot" style="background:rgba(0,0,0,0.60)"></div><span class="var-name">overlay/scrim-60</span><span class="var-value">rgba(0,0,0,0.60)</span></div><div class="var-item"><div class="var-dot" style="background:rgba(0,0,0,0.80)"></div><span class="var-name">overlay/scrim-80</span><span class="var-value">rgba(0,0,0,0.80)</span></div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- LOGOS -->
+
+
+<div class="container">
+  <footer>
+    <p>© 2026 Cleiton Avi Design · DS Avi v1.0 · Build to Last</p>
+    <p><a href="https://cleitonavi.com" target="_blank">cleitonavi.com →</a></p>
+  </footer>
+</div>
+
+<div class="toast" id="toast">Copiado!</div>
+<script>
+const toast=document.getElementById('toast');
+function copy(text,label){navigator.clipboard.writeText(text).then(()=>{toast.textContent=label?label+' copiado!':'Copiado!';toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)})}
+const sections=document.querySelectorAll('section[id]'),links=document.querySelectorAll('.nav-link');
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){links.forEach(l=>l.classList.remove('active'));const m=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(m)m.classList.add('active')}})},{threshold:.25});
+sections.forEach(s=>io.observe(s));
+</script>
+</body></html>
